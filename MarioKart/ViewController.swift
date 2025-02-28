@@ -60,13 +60,18 @@ class ViewController: UIViewController,
   // Called when user taps on the mushroom
   @IBAction func didTapMushroom(_ sender: UITapGestureRecognizer) {
     animateMushroom()
-    
     // Exercise 1: Assign the result of MushroomGenerator.maybeGenerateMushroomPowerup()
     // to a variable. Print something if it's not nil
     // ...
     
     // Exercise 2: Use the powerup on Mario using the useMushroomPowerupOnMario function
-    // ...
+      guard let powerup = MushroomGenerator.maybeGenerateMushroomPowerup() else {
+          print ("didn't get powerup")
+          return
+      }
+      useMushroomPowerupOnMario(powerup: powerup)
+
+
   }
   
   private func useMushroomPowerupOnMario(powerup: MushroomPowerup) {
@@ -82,7 +87,25 @@ class ViewController: UIViewController,
   
   // Exercise 3: Decipher the mystery box and apply the correct effect on mario
   private func decipher(mysteryBox: MysteryBox) {
-    
+      guard let effectDictionary = mysteryBox.mysteryEffect as? [String: String] else{
+          assertionFailure("Expecting value of type dictionary")
+          return
+      }
+      guard let effect = effectDictionary["effect"] else {
+          assertionFailure("Expecting value of type string")
+          return
+      }
+      if effect == "translate" {
+            translate(kart: kartView1, by: view.bounds.width)
+          } else if effect == "rotate" {
+            rotate(kart: kartView1)
+          } else if effect == "scale" {
+            scale(kart: kartView1)
+          } else {
+            assertionFailure("Unexpected effect")
+          }
+
+      
   }
   
   private func translate(kart: UIView?,
